@@ -1,0 +1,38 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+
+# Build
+build/
+
+# Java
+*.class
+
+# Generated
+out/
+
+# Maven Wrapper
+.mvn/wrapper/maven-wrapper.properties
+
+# Docker
+docker-data/
+
+# Mac/Linux
+.directory
