@@ -1,0 +1,5 @@
+FROM eclipse-temurin:11-jre-alpine
+
+COPY target/course-service.jar course-service.jar
+
+ENTRYPOINT ["java", "-jar", "course-service.jar"]
