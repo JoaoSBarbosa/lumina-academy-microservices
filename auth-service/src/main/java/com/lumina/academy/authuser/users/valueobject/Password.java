@@ -5,8 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 
-@Embeddable
-public record Password(@Column(name = "senha") String value) {
+public record Password(String value) {
 
     public Password {
         if (value == null || value.length() < 6)

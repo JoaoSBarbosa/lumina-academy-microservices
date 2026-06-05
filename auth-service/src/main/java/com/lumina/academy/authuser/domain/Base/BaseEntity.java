@@ -1,5 +1,7 @@
 package com.lumina.academy.authuser.domain.Base;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -7,7 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class BaseEntity extends Auditable {
+public abstract class BaseEntity extends Auditable implements Serializable {
+
+  @Serial
+  private static  final long serialVersionUID = 1L;
 
   @Id
   private UUID id;

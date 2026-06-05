@@ -6,10 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 
-@Embeddable
-public record Email(
-        @Column(name = "email")
-        String value) {
+public record Email(String value) {
 
     public Email {
         if (value == null || !value.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
