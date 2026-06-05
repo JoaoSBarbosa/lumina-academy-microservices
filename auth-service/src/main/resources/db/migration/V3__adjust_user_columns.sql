@@ -1,0 +1,4 @@
+ALTER TABLE tb_usuario ALTER COLUMN nome_usuario TYPE VARCHAR(50);
+ALTER TABLE tb_usuario ALTER COLUMN email TYPE VARCHAR(100);
+ALTER TABLE tb_usuario ALTER COLUMN genero TYPE CHAR(1);
+ALTER TABLE tb_usuario ALTER COLUMN url_foto_perfil TYPE TEXT;

@@ -5,5 +5,5 @@ public enum UserType {
     ADMIN,
     INSTRUCTOR,
     STUDENT,
-    USER
+    USER;
 }
