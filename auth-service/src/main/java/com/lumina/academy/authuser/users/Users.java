@@ -1,5 +1,8 @@
 package com.lumina.academy.authuser.users;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.lumina.academy.authuser.users.converters.CpfConverter;
 import com.lumina.academy.authuser.users.converters.EmailConverter;
 import com.lumina.academy.authuser.users.converters.PasswordConverter;
@@ -21,6 +24,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "tb_usuario")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Users extends BaseEntity {
 
@@ -37,8 +41,9 @@ public class Users extends BaseEntity {
     @Convert(converter = EmailConverter.class)
     private Email email;
 
-    @Column(name = "senha", nullable = false, length = 255)
+    @JsonIgnore
     @Convert(converter = PasswordConverter.class)
+    @Column(name = "senha", nullable = false, length = 255)
     private Password password;
 
     @Column(name = "telefone", length = 20)
@@ -65,6 +70,7 @@ public class Users extends BaseEntity {
     private UserType userType;
 
     @Column(name = "data_nascimento")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM=yyyy HH:mm:ss")
     private LocalDate birthDate;
 
 

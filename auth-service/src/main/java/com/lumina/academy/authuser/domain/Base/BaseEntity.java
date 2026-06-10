@@ -9,7 +9,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @MappedSuperclass
 public abstract class BaseEntity extends Auditable implements Serializable {
 
@@ -26,14 +30,6 @@ public abstract class BaseEntity extends Auditable implements Serializable {
 
     public BaseEntity(LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(createdAt, updatedAt);
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     @Override
