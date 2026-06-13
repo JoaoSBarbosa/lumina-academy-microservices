@@ -1,21 +1,21 @@
-package com.lumina.academy.authuser.users;
+package com.lumina.academy.authuser.domain.users.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.lumina.academy.authuser.users.converters.CpfConverter;
-import com.lumina.academy.authuser.users.converters.EmailConverter;
-import com.lumina.academy.authuser.users.converters.PasswordConverter;
-import com.lumina.academy.authuser.users.converters.PhoneNumberConverter;
-import com.lumina.academy.authuser.users.enums.UserGender;
-import com.lumina.academy.authuser.users.enums.UserStatus;
-import com.lumina.academy.authuser.users.enums.UserType;
-import com.lumina.academy.authuser.users.valueobject.Cpf;
-import com.lumina.academy.authuser.users.valueobject.PhoneNumber;
+import com.lumina.academy.authuser.domain.users.converters.CpfConverter;
+import com.lumina.academy.authuser.domain.users.converters.EmailConverter;
+import com.lumina.academy.authuser.domain.users.converters.PasswordConverter;
+import com.lumina.academy.authuser.domain.users.converters.PhoneNumberConverter;
+import com.lumina.academy.authuser.domain.users.enums.UserGender;
+import com.lumina.academy.authuser.domain.users.enums.UserStatus;
+import com.lumina.academy.authuser.domain.users.enums.UserType;
+import com.lumina.academy.authuser.domain.users.valueobjects.Cpf;
+import com.lumina.academy.authuser.domain.users.valueobjects.PhoneNumber;
 import jakarta.persistence.*;
 import com.lumina.academy.authuser.domain.Base.BaseEntity;
-import com.lumina.academy.authuser.users.valueobject.Email;
-import com.lumina.academy.authuser.users.valueobject.Password;
+import com.lumina.academy.authuser.domain.users.valueobjects.Email;
+import com.lumina.academy.authuser.domain.users.valueobjects.Password;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -25,7 +25,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "tb_usuario")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Users extends BaseEntity {
 
     @Column(name = "nome_usuario", nullable = false, unique = true, length = 50)

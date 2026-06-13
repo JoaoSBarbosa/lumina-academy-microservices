@@ -1,7 +1,7 @@
-package com.lumina.academy.authuser.users.converters;
+package com.lumina.academy.authuser.domain.users.converters;
 
 
-import com.lumina.academy.authuser.users.valueobject.Email;
+import com.lumina.academy.authuser.domain.users.valueobjects.Email;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

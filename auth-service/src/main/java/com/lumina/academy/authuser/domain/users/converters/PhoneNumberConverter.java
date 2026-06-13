@@ -1,6 +1,6 @@
-package com.lumina.academy.authuser.users.converters;
+package com.lumina.academy.authuser.domain.users.converters;
 
-import com.lumina.academy.authuser.users.valueobject.PhoneNumber;
+import com.lumina.academy.authuser.domain.users.valueobjects.PhoneNumber;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

@@ -1,4 +1,4 @@
-package com.lumina.academy.authuser.users.enums;
+package com.lumina.academy.authuser.domain.users.enums;
 
 public enum UserType {
 

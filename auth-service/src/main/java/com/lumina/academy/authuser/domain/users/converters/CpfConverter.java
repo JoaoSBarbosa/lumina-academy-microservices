@@ -1,6 +1,6 @@
-package com.lumina.academy.authuser.users.converters;
+package com.lumina.academy.authuser.domain.users.converters;
 
-import com.lumina.academy.authuser.users.valueobject.Cpf;
+import com.lumina.academy.authuser.domain.users.valueobjects.Cpf;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
