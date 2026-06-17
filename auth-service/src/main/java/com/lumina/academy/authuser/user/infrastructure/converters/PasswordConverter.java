@@ -1,0 +1,19 @@
+package com.lumina.academy.authuser.user.infrastructure.converters;
+
+import com.lumina.academy.authuser.user.domain.vo.Password;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
+
+@Converter(autoApply = true)
+public class PasswordConverter implements AttributeConverter<Password, String> {
+
+    @Override
+    public String convertToDatabaseColumn(Password password) {
+        return password == null ? null : password.value();
+    }
+
+    @Override
+    public Password convertToEntityAttribute(String password) {
+        return password == null ? null : new Password(password);
+    }
+}
