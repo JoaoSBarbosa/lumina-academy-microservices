@@ -32,6 +32,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.failure(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
     }
 
+    @ExceptionHandler(MissingRequiredFieldException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMissingRequiredField(MissingRequiredFieldException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.failure(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDuplicateResourceException(DuplicateResourceException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.failure(ex.getMessage(), HttpStatus.CONFLICT.value()));
+    }
+
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneric(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.failure("Erro interno no servidor", HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }

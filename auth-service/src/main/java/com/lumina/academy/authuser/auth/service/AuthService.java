@@ -7,4 +7,7 @@ public interface AuthService {
 
     UserResponse register(UserCreateRequest users);
 
+    boolean existsByUserNameOrEmail(String email, String username);
+
+
 }
