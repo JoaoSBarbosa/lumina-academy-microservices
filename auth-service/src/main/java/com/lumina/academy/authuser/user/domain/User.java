@@ -55,7 +55,7 @@ public class User extends BaseEntity {
     private Cpf cpf;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "genero", nullable = false, length = 1)
+    @Column(name = "genero", length = 1)
     private UserGender gender;
 
     @Column(name = "url_foto_perfil")

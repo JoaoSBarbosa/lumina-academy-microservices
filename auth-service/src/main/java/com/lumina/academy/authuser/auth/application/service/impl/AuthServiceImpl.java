@@ -1,10 +1,11 @@
-package com.lumina.academy.authuser.auth.service.impl;
+package com.lumina.academy.authuser.auth.application.service.impl;
 
-import com.lumina.academy.authuser.auth.service.AuthService;
+import com.lumina.academy.authuser.auth.application.dto.request.RegisterUserRequest;
+import com.lumina.academy.authuser.auth.application.service.AuthService;
 import com.lumina.academy.authuser.shared.exception.DuplicateResourceException;
 import com.lumina.academy.authuser.shared.exception.MissingRequiredFieldException;
-import com.lumina.academy.authuser.user.application.dto.UserCreateRequest;
-import com.lumina.academy.authuser.user.application.dto.UserResponse;
+import com.lumina.academy.authuser.user.application.dto.request.UserRequestDTO;
+import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
 import com.lumina.academy.authuser.user.domain.User;
 import com.lumina.academy.authuser.user.domain.enums.UserStatus;
 import com.lumina.academy.authuser.user.domain.vo.Email;
@@ -28,13 +29,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserResponse register(UserCreateRequest users) {
+    public UserResponse register(RegisterUserRequest register) {
 
-        logger.info("[insert] Iniciando cadastro do usuário: {}", users.getFirstName());
+        logger.info("[insert] Iniciando cadastro do usuário: {}", register.getFirstName());
 
-        validateDuplicateUser(users.getEmail(), users.getUserName());
+        validateDuplicateUser(register.getEmail(), register.getUserName());
 
-        User entity = mapper.toEntity(users);
+        User entity = mapper.toEntity(register);
 
         entity.setStatus(UserStatus.ACTIVE);
         entity = userRepository.save(entity);

@@ -2,11 +2,17 @@ package com.lumina.academy.authuser.user.application.service.impl;
 
 import com.lumina.academy.authuser.shared.exception.BusinessException;
 import com.lumina.academy.authuser.shared.exception.ResourceNotFoundException;
-import com.lumina.academy.authuser.user.application.dto.UserResponse;
+import com.lumina.academy.authuser.user.application.dto.request.UpdateUserRequest;
+import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
+import com.lumina.academy.authuser.user.domain.vo.Cpf;
+import com.lumina.academy.authuser.user.domain.vo.Email;
+import com.lumina.academy.authuser.user.domain.vo.PhoneNumber;
 import com.lumina.academy.authuser.user.mapper.UserMapper;
 import com.lumina.academy.authuser.user.domain.User;
 import com.lumina.academy.authuser.user.infrastructure.persistence.UserRepository;
 import com.lumina.academy.authuser.user.application.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
     private final UserMapper mapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepositoryJpa, UserMapper mapper) {
         this.repository = userRepositoryJpa;
@@ -53,9 +60,18 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserResponse update(User users) {
-        var user = repository.save(users);
-        return mapper.toResponse(user);
+    public UserResponse update(UpdateUserRequest update, UUID id) {
+        try {
+            LOGGER.info("Atualizando usuário: {}", id);
+            User user = repository.getReferenceById(id);
+            MapUpdateFields(update, user);
+
+            user = repository.save(user);
+            LOGGER.info("Usuário atualizado com sucesso: {}", id);
+            return mapper.toResponse(user);
+        } catch (Exception ex) {
+            throw new BusinessException(ex.getMessage());
+        }
     }
 
     @Override
@@ -66,5 +82,31 @@ public class UserServiceImpl implements UserService {
         } catch (Exception ex) {
             throw new BusinessException("Erro ao deletar usuário: " + userId + " | Erro: " + ex.getMessage());
         }
+    }
+
+    private void MapUpdateFields(UpdateUserRequest update, User user) {
+
+        if (update.getFirstName() != null && !update.getFirstName().isBlank())
+            user.setFirstName(update.getFirstName());
+
+        if (update.getLastName() != null && !update.getLastName().isBlank())
+            user.setLastName(update.getLastName());
+
+        if (update.getEmail() != null && !update.getEmail().isBlank())
+            user.setEmail(Email.toEmail(update.getEmail()));
+
+        if (update.getCpf() != null && !update.getCpf().isBlank())
+            user.setCpf(Cpf.toCpf(update.getCpf()));
+
+        if (update.getStatus() != null)
+            user.setStatus(update.getStatus());
+
+        if (update.getUserType() != null)
+            user.setUserType(update.getUserType());
+
+        user.setPhoneNumber(PhoneNumber.toPhone(update.getPhoneNumber()));
+        user.setBirthDate(update.getBirthDate());
+        user.setGender(update.getGender());
+
     }
 }

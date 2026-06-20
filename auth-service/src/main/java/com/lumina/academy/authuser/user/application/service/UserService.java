@@ -1,7 +1,7 @@
 package com.lumina.academy.authuser.user.application.service;
 
-import com.lumina.academy.authuser.user.application.dto.UserResponse;
-import com.lumina.academy.authuser.user.application.dto.UserCreateRequest;
+import com.lumina.academy.authuser.user.application.dto.request.UpdateUserRequest;
+import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
 import com.lumina.academy.authuser.user.domain.User;
 import org.springframework.data.domain.Pageable;
 
@@ -19,7 +19,7 @@ public interface UserService {
     List<UserResponse> findAll(Pageable pageable, UUID userId);
 
 
-    UserResponse update(User users);
+    UserResponse update(UpdateUserRequest users, UUID userId);
 
     void delete(UUID userId);
 }

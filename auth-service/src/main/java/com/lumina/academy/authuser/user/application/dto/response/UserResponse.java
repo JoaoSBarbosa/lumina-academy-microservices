@@ -1,9 +1,10 @@
-package com.lumina.academy.authuser.user.application.dto;
+package com.lumina.academy.authuser.user.application.dto.response;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -20,7 +21,9 @@ public record UserResponse(
         String status,
         String userType,
         LocalDate birthDate,
-        String oldPassword) {
+        String oldPassword,
+        LocalDateTime createdAt,
+        LocalDateTime updateAt) {
 
 }
 

@@ -1,7 +1,8 @@
 package com.lumina.academy.authuser.user.mapper;
 
-import com.lumina.academy.authuser.user.application.dto.UserResponse;
-import com.lumina.academy.authuser.user.application.dto.UserCreateRequest;
+import com.lumina.academy.authuser.auth.application.dto.request.RegisterUserRequest;
+import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
+import com.lumina.academy.authuser.user.application.dto.request.UserRequestDTO;
 import com.lumina.academy.authuser.user.domain.User;
 import com.lumina.academy.authuser.user.domain.vo.Cpf;
 import com.lumina.academy.authuser.user.domain.vo.Email;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapperImpl implements UserMapper {
 
+
     @Override
-    public User toEntity(UserCreateRequest create) {
+    public User toEntity(RegisterUserRequest create) {
         if (create == null) return null;
+
         User user = new User();
         user.setUserName(create.getUserName());
         user.setFirstName(create.getFirstName());
@@ -22,6 +25,9 @@ public class UserMapperImpl implements UserMapper {
         user.setPassword(Password.toPassword(create.getPassword()));
         user.setCpf(Cpf.toCpf(create.getCpf()));
         user.setUserType(create.getUserType());
+        user.setStatus(create.getStatus());
+
+
         return user;
     }
 
@@ -43,7 +49,9 @@ public class UserMapperImpl implements UserMapper {
                 user.getStatus() != null ? user.getStatus().name() : null,
                 user.getUserType() != null ? user.getUserType().name() : null,
                 user.getBirthDate(),
-                user.getPassword() != null ? user.getPassword().value() : null
+                user.getPassword() != null ? user.getPassword().value() : null,
+                user.getCreatedAt(),
+                user.getUpdatedAt()
         );
     }
 }
