@@ -21,7 +21,6 @@ public record UserResponse(
         String status,
         String userType,
         LocalDate birthDate,
-        String oldPassword,
         LocalDateTime createdAt,
         LocalDateTime updateAt) {
 

@@ -1,13 +1,15 @@
 package com.lumina.academy.authuser.user.application.service.impl;
 
 import com.lumina.academy.authuser.shared.exception.BusinessException;
+import com.lumina.academy.authuser.shared.exception.MissingRequiredFieldException;
 import com.lumina.academy.authuser.shared.exception.ResourceNotFoundException;
+import com.lumina.academy.authuser.user.application.dto.request.UpdateProfileImageRequest;
 import com.lumina.academy.authuser.user.application.dto.request.UpdateUserRequest;
 import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
 import com.lumina.academy.authuser.user.domain.vo.Cpf;
 import com.lumina.academy.authuser.user.domain.vo.Email;
 import com.lumina.academy.authuser.user.domain.vo.PhoneNumber;
-import com.lumina.academy.authuser.user.mapper.UserMapper;
+import com.lumina.academy.authuser.user.application.mapper.UserMapper;
 import com.lumina.academy.authuser.user.domain.User;
 import com.lumina.academy.authuser.user.infrastructure.persistence.UserRepository;
 import com.lumina.academy.authuser.user.application.service.UserService;
@@ -45,6 +47,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponse updateProfileImage(UpdateProfileImageRequest request, UUID userId) {
+        if (request.getImageUrl() == null) throw new MissingRequiredFieldException("A URL da imagem é necessária");
+        User user = repository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + userId));
+
+        user.setImageUrl(request.getImageUrl());
+        user = repository.save(user);
+        return mapper.toResponse(user);
+    }
+
+    @Override
     public UserResponse findById(UUID id) {
         return repository.findById(id)
                 .map(mapper::toResponse)
@@ -62,15 +74,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse update(UpdateUserRequest update, UUID id) {
         try {
-            LOGGER.info("Atualizando usuário: {}", id);
-            User user = repository.getReferenceById(id);
+            User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado: " + id));
             MapUpdateFields(update, user);
 
             user = repository.save(user);
-            LOGGER.info("Usuário atualizado com sucesso: {}", id);
+            LOGGER.info("[SERVICE] Usuário atualizado com sucesso: {}", id);
             return mapper.toResponse(user);
         } catch (Exception ex) {
-            throw new BusinessException(ex.getMessage());
+            throw new BusinessException("Erro ao tentar atualizar usuário | : " + ex.getMessage());
         }
     }
 

@@ -4,8 +4,7 @@ import com.lumina.academy.authuser.user.domain.enums.UserGender;
 import com.lumina.academy.authuser.user.domain.enums.UserStatus;
 import com.lumina.academy.authuser.user.domain.enums.UserType;
 import com.lumina.academy.authuser.user.domain.vo.PhoneNumber;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,15 +16,19 @@ public class UpdateUserRequest {
 
 
     @NotBlank(message = "Primeiro nome é obrigatorio")
+    @Size(min = 2, max = 200, message = "Primeiro nome deve ter entre 2 e 200 caracteres")
     private String firstName;
 
     @NotBlank(message = "Sobrenome é obrigatorio")
+    @Size(min = 2, max = 200, message = "Sobrenome deve ter entre 2 e 200 caracteres")
     private String lastName;
 
     @NotBlank(message = "Email é obrigatorio")
+    @Email(message = "Formato de email inválido")
     private String email;
 
     @NotBlank(message = "CPF é obrigatorio")
+    @Pattern(regexp = "\\d{11}", message = "CPF deve conter exatamente 11 dígitos")
     private String cpf;
 
     @NotNull(message = "Tipo de cadastro é obrigatorio")

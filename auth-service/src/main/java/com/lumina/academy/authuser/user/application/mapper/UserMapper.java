@@ -1,8 +1,7 @@
-package com.lumina.academy.authuser.user.mapper;
+package com.lumina.academy.authuser.user.application.mapper;
 
 import com.lumina.academy.authuser.auth.application.dto.request.RegisterUserRequest;
 import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
-import com.lumina.academy.authuser.user.application.dto.request.UserRequestDTO;
 import com.lumina.academy.authuser.user.domain.User;
 
 public interface UserMapper {

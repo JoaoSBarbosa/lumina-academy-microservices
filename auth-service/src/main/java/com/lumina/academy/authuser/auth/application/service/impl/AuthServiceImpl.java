@@ -1,19 +1,24 @@
 package com.lumina.academy.authuser.auth.application.service.impl;
 
+import com.lumina.academy.authuser.auth.application.dto.request.ChangePasswordRequest;
 import com.lumina.academy.authuser.auth.application.dto.request.RegisterUserRequest;
 import com.lumina.academy.authuser.auth.application.service.AuthService;
+import com.lumina.academy.authuser.shared.exception.BusinessException;
 import com.lumina.academy.authuser.shared.exception.DuplicateResourceException;
 import com.lumina.academy.authuser.shared.exception.MissingRequiredFieldException;
-import com.lumina.academy.authuser.user.application.dto.request.UserRequestDTO;
+import com.lumina.academy.authuser.shared.exception.ResourceNotFoundException;
 import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
 import com.lumina.academy.authuser.user.domain.User;
 import com.lumina.academy.authuser.user.domain.enums.UserStatus;
 import com.lumina.academy.authuser.user.domain.vo.Email;
+import com.lumina.academy.authuser.user.domain.vo.Password;
 import com.lumina.academy.authuser.user.infrastructure.persistence.UserRepository;
-import com.lumina.academy.authuser.user.mapper.UserMapper;
+import com.lumina.academy.authuser.user.application.mapper.UserMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -51,6 +56,49 @@ public class AuthServiceImpl implements AuthService {
             throw new MissingRequiredFieldException("Email e username são obrigatórios");
         Email emailVo = new Email(email);
         return userRepository.existsByUserNameOrEmail(emailVo, username);
+    }
+
+    @Override
+    public void alterPassword(ChangePasswordRequest passwordRequest, UUID id) {
+
+        try {
+            validateChangePasswordRequest(passwordRequest);
+            User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+
+            if (!user.getPassword().value().equals(passwordRequest.getOldPassword())) {
+                throw new BusinessException("Senha antiga inválida");
+            }
+
+            user.setPassword(Password.toPassword(passwordRequest.getPassword()));
+
+            userRepository.save(user);
+
+
+        } catch (MissingRequiredFieldException ex) {
+            throw new MissingRequiredFieldException(ex.getMessage());
+        } catch (Exception ex) {
+            throw new BusinessException(ex.getMessage());
+        }
+
+    }
+
+    private void validateChangePasswordRequest(ChangePasswordRequest passwordRequest) {
+
+        if (passwordRequest == null) throw new MissingRequiredFieldException("Request não informado.");
+        if (passwordRequest.getPassword() == null || passwordRequest.getPassword().isBlank())
+            throw new MissingRequiredFieldException("Necessário informar a nova senha");
+        if (passwordRequest.getConfirmPassword() == null || passwordRequest.getConfirmPassword().isBlank())
+            throw new MissingRequiredFieldException("Necessário confirmar a nova senha");
+        if (passwordRequest.getOldPassword() == null || passwordRequest.getOldPassword().isBlank())
+            throw new MissingRequiredFieldException("Necessário informar a senha antiga");
+
+        if (!passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword()))
+            throw new BusinessException("A confirmação da senha não confere");
+
+        if (passwordRequest.getPassword().equals(passwordRequest.getOldPassword()))
+            throw new BusinessException("A nova senha deve ser diferente da senha atual");
+
+
     }
 
     private void validateDuplicateUser(String email, String userName) {

@@ -11,7 +11,7 @@ import com.lumina.academy.authuser.user.domain.vo.Cpf;
 import com.lumina.academy.authuser.user.domain.vo.Email;
 import com.lumina.academy.authuser.user.domain.vo.Password;
 import com.lumina.academy.authuser.user.infrastructure.persistence.UserRepository;
-import com.lumina.academy.authuser.user.mapper.UserMapper;
+import com.lumina.academy.authuser.user.application.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -54,7 +54,6 @@ public class UserServiceImplTest {
         userBefore.setStatus(UserStatus.ACTIVE);
         userBefore.setUserType(UserType.USER);
 
-        // 2. Requisição de update com novos dados
         UpdateUserRequest request = new UpdateUserRequest();
         request.setFirstName("José");
         request.setLastName("Santos");
@@ -65,19 +64,15 @@ public class UserServiceImplTest {
         request.setUserType(UserType.ADMIN);
         request.setStatus(UserStatus.ACTIVE);
 
-        // 3. getReferenceById retorna o usuário ANTES da atualização
         when(userRepository.getReferenceById(id)).thenReturn(userBefore);
 
-        // 4. Chama save, retorna o usuário já atualizado
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
             User updatedUser = invocation.getArgument(0);
             return updatedUser;
         });
 
-        // Act
         UserResponse result = userService.update(request, id);
 
-        // Assert
         assertNotNull(result);
         assertEquals("José", result.firstName());
         assertEquals("Santos", result.lastName());

@@ -1,5 +1,6 @@
 package com.lumina.academy.authuser.user.application.service;
 
+import com.lumina.academy.authuser.user.application.dto.request.UpdateProfileImageRequest;
 import com.lumina.academy.authuser.user.application.dto.request.UpdateUserRequest;
 import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
 import com.lumina.academy.authuser.user.domain.User;
@@ -18,6 +19,7 @@ public interface UserService {
 
     List<UserResponse> findAll(Pageable pageable, UUID userId);
 
+    UserResponse updateProfileImage(UpdateProfileImageRequest request, UUID userId);
 
     UserResponse update(UpdateUserRequest users, UUID userId);
 

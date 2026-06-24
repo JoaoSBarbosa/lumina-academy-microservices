@@ -1,8 +1,7 @@
-package com.lumina.academy.authuser.user.mapper;
+package com.lumina.academy.authuser.user.application.mapper;
 
 import com.lumina.academy.authuser.auth.application.dto.request.RegisterUserRequest;
 import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
-import com.lumina.academy.authuser.user.application.dto.request.UserRequestDTO;
 import com.lumina.academy.authuser.user.domain.User;
 import com.lumina.academy.authuser.user.domain.vo.Cpf;
 import com.lumina.academy.authuser.user.domain.vo.Email;
@@ -49,7 +48,6 @@ public class UserMapperImpl implements UserMapper {
                 user.getStatus() != null ? user.getStatus().name() : null,
                 user.getUserType() != null ? user.getUserType().name() : null,
                 user.getBirthDate(),
-                user.getPassword() != null ? user.getPassword().value() : null,
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );
