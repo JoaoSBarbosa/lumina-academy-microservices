@@ -3,7 +3,6 @@ package com.lumina.academy.authuser.user.application.dto.request;
 import com.lumina.academy.authuser.user.domain.enums.UserGender;
 import com.lumina.academy.authuser.user.domain.enums.UserStatus;
 import com.lumina.academy.authuser.user.domain.enums.UserType;
-import com.lumina.academy.authuser.user.domain.vo.PhoneNumber;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
