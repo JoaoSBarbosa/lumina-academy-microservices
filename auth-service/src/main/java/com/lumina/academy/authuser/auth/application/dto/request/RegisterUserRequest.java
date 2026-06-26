@@ -2,6 +2,7 @@ package com.lumina.academy.authuser.auth.application.dto.request;
 
 import com.lumina.academy.authuser.user.domain.enums.UserStatus;
 import com.lumina.academy.authuser.user.domain.enums.UserType;
+import com.lumina.academy.authuser.user.domain.validations.UserNameConstraint;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class RegisterUserRequest {
 
-
+    @UserNameConstraint
     @NotBlank(message = "Username é obrigatorio")
     @Size(min = 4, max = 50, message = "Username deve ter entre 4 e 50 caracteres")
     private String userName;

@@ -29,7 +29,6 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class User extends BaseEntity {
 
-    @UserNameConstraint
     @Column(name = "nome_usuario", nullable = false, unique = true, length = 50)
     private String userName;
 

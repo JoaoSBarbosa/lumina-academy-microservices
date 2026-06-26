@@ -16,8 +16,10 @@ import com.lumina.academy.authuser.user.infrastructure.persistence.UserRepositor
 import com.lumina.academy.authuser.user.application.mapper.UserMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.util.UUID;
 
 @Service
@@ -35,25 +37,26 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserResponse register(RegisterUserRequest register) {
+        try {
+            logger.info("[insert] Iniciando cadastro do usuário: {}", register.getFirstName());
 
-        logger.info("[insert] Iniciando cadastro do usuário: {}", register.getFirstName());
+            validateDuplicateUser(register.getEmail(), register.getUserName());
 
-        validateDuplicateUser(register.getEmail(), register.getUserName());
+            User entity = mapper.toEntity(register);
 
-        User entity = mapper.toEntity(register);
-
-        entity.setStatus(UserStatus.ACTIVE);
-        entity = userRepository.save(entity);
-        logger.info("[insert] Usuário cadastrado com sucesso: {}", entity.getId());
-        return mapper.toResponse(entity);
-
+            entity.setStatus(UserStatus.ACTIVE);
+            entity = userRepository.save(entity);
+            logger.info("[insert] Usuário cadastrado com sucesso: {}", entity.getId());
+            return mapper.toResponse(entity);
+        } catch (DataIntegrityViolationException ex) {
+            throw resolverDuplicateException(ex);
+        }
     }
 
 
     @Override
     public boolean existsByUserNameOrEmail(String email, String username) {
-        if (email == null || username == null)
-            throw new MissingRequiredFieldException("Email e username são obrigatórios");
+     
         Email emailVo = new Email(email);
         return userRepository.existsByUserNameOrEmail(emailVo, username);
     }
@@ -109,5 +112,15 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+
+    private DuplicateResourceException resolverDuplicateException(DataIntegrityViolationException ex) {
+        String error = ex.getMostSpecificCause().getMessage();
+        if (error.contains("tb_usuario_cpf_key")) return new DuplicateResourceException("CPF já cadastrado");
+        if (error.contains("tb_usuario_email_key")) return new DuplicateResourceException("E-mail já cadastrado");
+        if (error.contains("tb_usuario_nome_usuario_key"))
+            return new DuplicateResourceException("Nome de usuário já cadastrado.");
+
+        return new DuplicateResourceException("Já existe um registro com esses dados.");
+    }
 
 }
