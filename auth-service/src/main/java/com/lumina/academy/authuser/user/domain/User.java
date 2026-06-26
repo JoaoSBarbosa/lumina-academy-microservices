@@ -3,6 +3,7 @@ package com.lumina.academy.authuser.user.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.lumina.academy.authuser.user.domain.validations.UserNameConstraint;
 import com.lumina.academy.authuser.user.infrastructure.converters.CpfConverter;
 import com.lumina.academy.authuser.user.infrastructure.converters.EmailConverter;
 import com.lumina.academy.authuser.user.infrastructure.converters.PasswordConverter;
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class User extends BaseEntity {
 
+    @UserNameConstraint
     @Column(name = "nome_usuario", nullable = false, unique = true, length = 50)
     private String userName;
 
