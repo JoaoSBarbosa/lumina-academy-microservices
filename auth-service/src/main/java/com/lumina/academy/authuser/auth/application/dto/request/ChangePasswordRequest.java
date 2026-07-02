@@ -1,5 +1,6 @@
 package com.lumina.academy.authuser.auth.application.dto.request;
 
+import com.lumina.academy.authuser.auth.application.validations.PasswordMatches;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@PasswordMatches(password = "password", confirmPassword = "confirmPassword")
 public class ChangePasswordRequest {
 
     @NotBlank(message = "Senha é obrigatoria")

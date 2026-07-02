@@ -15,6 +15,7 @@ import com.lumina.academy.authuser.user.infrastructure.persistence.UserRepositor
 import com.lumina.academy.authuser.user.application.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -41,9 +42,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> findAll(Pageable pageable, UUID userId) {
+    public Page<UserResponse> findAll(Pageable pageable) {
 
-        return repository.findAll(pageable).stream().map(mapper::toResponse).toList();
+
+        return repository.findAll(pageable).map(mapper::toResponse);
     }
 
     @Override

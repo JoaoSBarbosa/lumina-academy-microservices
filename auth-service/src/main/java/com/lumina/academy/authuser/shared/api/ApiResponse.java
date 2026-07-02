@@ -39,6 +39,24 @@ public class ApiResponse<T> {
                 .build();
     }
 
+    public static <T> ApiResponse<PageResponse<T>> page(PageResponse<T> pageData) {
+        return ApiResponse.<PageResponse<T>>builder()
+                .code(200)
+                .success(true)
+                .message("Ok")
+                .data(pageData)
+                .build();
+    }
+
+    public static <T> ApiResponse<PageResponse<T>> page(PageResponse<T> pageData, String message) {
+        return ApiResponse.<PageResponse<T>>builder()
+                .code(200)
+                .success(true)
+                .message(message)
+                .data(pageData)
+                .build();
+    }
+
     public static <T> ApiResponse<T> failure(String message, int code) {
         return ApiResponse.<T>builder()
                 .code(code)

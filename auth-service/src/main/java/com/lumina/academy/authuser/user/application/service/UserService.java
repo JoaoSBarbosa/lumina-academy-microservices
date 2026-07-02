@@ -4,6 +4,7 @@ import com.lumina.academy.authuser.user.application.dto.request.UpdateProfileIma
 import com.lumina.academy.authuser.user.application.dto.request.UpdateUserRequest;
 import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
 import com.lumina.academy.authuser.user.domain.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface UserService {
 
     UserResponse findByUsername(String username, String lastName);
 
-    List<UserResponse> findAll(Pageable pageable, UUID userId);
+    Page<UserResponse> findAll(Pageable pageable);
 
     UserResponse updateProfileImage(UpdateProfileImageRequest request, UUID userId);
 

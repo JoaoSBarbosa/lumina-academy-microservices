@@ -2,15 +2,21 @@ package com.lumina.academy.authuser.user.api;
 
 
 import com.lumina.academy.authuser.shared.api.ApiResponse;
+import com.lumina.academy.authuser.shared.api.PageResponse;
 import com.lumina.academy.authuser.user.application.dto.request.UpdateProfileImageRequest;
 import com.lumina.academy.authuser.user.application.dto.request.UpdateUserRequest;
 import com.lumina.academy.authuser.user.application.dto.response.UserResponse;
+import com.lumina.academy.authuser.user.application.mapper.UserMapper;
+import com.lumina.academy.authuser.user.application.mapper.UserMapperImpl;
 import com.lumina.academy.authuser.user.application.service.UserService;
 import com.lumina.academy.authuser.user.application.service.impl.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -32,10 +38,19 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<ApiResponse<List<UserResponse>>> findAll(@RequestParam(required = false) UUID userId, Pageable pageable) {
-        List<UserResponse> users = userService.findAll(pageable, userId);
-        return ResponseEntity.ok(ApiResponse.success(users));
+    public ResponseEntity<ApiResponse<PageResponse<UserResponse>>> findAll(
+            @PageableDefault(
+                    page = 0,
+                    size = 100,
+                    sort = "id",
+                    direction = Sort.Direction.ASC
+            ) Pageable pageable
+    ) {
+        Page<UserResponse> users = userService.findAll(pageable);
+        PageResponse<UserResponse> pageResponse = PageResponse.from(users);
+        return ResponseEntity.ok(ApiResponse.page(pageResponse));
     }
+
 
     @GetMapping("/{email}/email")
     public ResponseEntity<ApiResponse<UserResponse>> findUserByEmail(@RequestParam String email) {

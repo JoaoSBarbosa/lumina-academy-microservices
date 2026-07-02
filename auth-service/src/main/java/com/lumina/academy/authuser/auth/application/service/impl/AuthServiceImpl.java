@@ -56,7 +56,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean existsByUserNameOrEmail(String email, String username) {
-     
+        if (email == null || username == null)
+            throw new MissingRequiredFieldException("Email e username são obrigatórios");
         Email emailVo = new Email(email);
         return userRepository.existsByUserNameOrEmail(emailVo, username);
     }
@@ -64,44 +65,18 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void alterPassword(ChangePasswordRequest passwordRequest, UUID id) {
 
-        try {
-            validateChangePasswordRequest(passwordRequest);
-            User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
-
-            if (!user.getPassword().value().equals(passwordRequest.getOldPassword())) {
-                throw new BusinessException("Senha antiga inválida");
-            }
-
-            user.setPassword(Password.toPassword(passwordRequest.getPassword()));
-
-            userRepository.save(user);
-
-
-        } catch (MissingRequiredFieldException ex) {
-            throw new MissingRequiredFieldException(ex.getMessage());
-        } catch (Exception ex) {
-            throw new BusinessException(ex.getMessage());
-        }
+        validateChangePasswordRequest(passwordRequest);
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+        user.setPassword(Password.toPassword(passwordRequest.getPassword()));
+        userRepository.save(user);
 
     }
 
     private void validateChangePasswordRequest(ChangePasswordRequest passwordRequest) {
 
         if (passwordRequest == null) throw new MissingRequiredFieldException("Request não informado.");
-        if (passwordRequest.getPassword() == null || passwordRequest.getPassword().isBlank())
-            throw new MissingRequiredFieldException("Necessário informar a nova senha");
-        if (passwordRequest.getConfirmPassword() == null || passwordRequest.getConfirmPassword().isBlank())
-            throw new MissingRequiredFieldException("Necessário confirmar a nova senha");
-        if (passwordRequest.getOldPassword() == null || passwordRequest.getOldPassword().isBlank())
-            throw new MissingRequiredFieldException("Necessário informar a senha antiga");
-
-        if (!passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword()))
-            throw new BusinessException("A confirmação da senha não confere");
-
         if (passwordRequest.getPassword().equals(passwordRequest.getOldPassword()))
             throw new BusinessException("A nova senha deve ser diferente da senha atual");
-
-
     }
 
     private void validateDuplicateUser(String email, String userName) {
